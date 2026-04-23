@@ -1,0 +1,67 @@
+{% set model = fsc.getModel() %}
+{% set ayuda = fsc.ayuda %}
+
+{% if model.id %}
+
+<form action="{{ model.url() }}&activetab=EditAsientoPredefinidoAyuda" method="post">
+    {{ formToken() }}
+    <input type="hidden" name="action" value="save-ayuda"/>
+    <input type="hidden" name="idasientopre" value="{{ model.id }}"/>
+
+    <div class="card shadow mx-3 mt-3 mb-3">
+        <div class="card-header py-2 d-flex align-items-center justify-content-between">
+            <span>
+                <i class="fa-solid fa-circle-info me-1 text-primary"></i>
+                <strong>{{ trans('help-example') }}</strong>
+                &mdash; {{ model.descripcion }}
+            </span>
+            <button type="submit" class="btn btn-sm btn-primary ms-3">
+                <i class="fa-solid fa-save me-1"></i>{{ trans('save-help') }}
+            </button>
+        </div>
+        <div class="card-body">
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">
+                    <i class="fa-solid fa-calendar-check text-primary me-1"></i>
+                    {{ trans('when-to-use') }}
+                </label>
+                <textarea name="cuando" class="form-control" rows="6"
+                    placeholder="{{ trans('when-to-use-hint') }}">{{ ayuda ? ayuda.cuando : '' }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">
+                    <i class="fa-solid fa-file-invoice-dollar text-success me-1"></i>
+                    {{ trans('real-example') }}
+                </label>
+                <textarea name="ejemplo" class="form-control" rows="5"
+                    placeholder="{{ trans('real-example-hint') }}">{{ ayuda ? ayuda.ejemplo : '' }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">
+                    <i class="fa-solid fa-scale-balanced text-warning me-1"></i>
+                    {{ trans('fiscal-note') }}
+                </label>
+                <textarea name="nota" class="form-control" rows="7"
+                    placeholder="{{ trans('fiscal-note-hint') }}">{{ ayuda ? ayuda.nota : '' }}</textarea>
+            </div>
+
+        </div>
+        <div class="card-footer text-end p-2">
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-save me-1"></i>{{ trans('save-help') }}
+            </button>
+        </div>
+    </div>
+</form>
+
+{% else %}
+
+<div class="alert alert-info m-3">
+    <i class="fa-solid fa-circle-info me-2"></i>
+    {{ trans('save-first-to-edit-help') }}
+</div>
+
+{% endif %}

@@ -1,0 +1,38 @@
+{% set model = fsc.getModel() %}
+{% if model.id %}
+
+{# Formulario oculto para restaurar el asiento — lo envía el JS al desmarcar el checkbox #}
+<form id="form-restore-asiento" action="{{ model.url() }}" method="post" style="display:none">
+    {{ formToken() }}
+    <input type="hidden" name="action" value="restore-asiento"/>
+    <input type="hidden" name="idasientopre" value="{{ model.id }}"/>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var chk = document.querySelector('input[name="personalizado"][type="checkbox"]');
+    if (!chk) return;
+
+    // Hacer el checkbox interactivo (el XMLView lo pone readonly)
+    chk.removeAttribute('disabled');
+    chk.style.cursor = 'pointer';
+
+    chk.addEventListener('change', function () {
+        if (this.checked) {
+            // No se puede marcar manualmente — solo al guardar datos
+            this.checked = true;
+            return;
+        }
+
+        // Desmarcado: pedir confirmación antes de restaurar
+        if (!confirm({{ trans('restore-entry-confirm')|json_encode }}) ) {
+            this.checked = true; // Cancelado: revertir
+            return;
+        }
+
+        // Confirmado: enviar el formulario de restauración
+        document.getElementById('form-restore-asiento').submit();
+    });
+});
+</script>
+{% endif %}

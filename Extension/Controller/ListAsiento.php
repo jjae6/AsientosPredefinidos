@@ -43,6 +43,7 @@ class ListAsiento
             $this->addView($viewName, 'AsientoPredefinido', 'predefined-acc-entries', 'fa-solid fa-blender');
             $this->addOrderBy($viewName, ["id"], "code");
             $this->addOrderBy($viewName, ["descripcion"], "description", 1);
+            $this->addOrderBy($viewName, ["personalizado"], "custom-entry");
             $this->addSearchFields($viewName, ["id", "concepto", "descripcion"]);
         };
     }

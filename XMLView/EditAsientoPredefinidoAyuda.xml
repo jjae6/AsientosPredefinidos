@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+
+            <column name="idasientopre" order="0" numcolumns="0">
+                <widget type="number" fieldname="idasientopre" readonly="true"/>
+            </column>
+
+            <column name="personalizada" title="custom-help" order="10" numcolumns="12">
+                <widget type="checkbox" fieldname="personalizada" readonly="true"
+                    hint="Marcado automáticamente al guardar. Mientras esté activo, las actualizaciones del plugin no sobreescribirán esta ayuda."/>
+            </column>
+
+            <column name="when-to-use" title="when-to-use" order="100" numcolumns="12">
+                <widget type="textarea" fieldname="cuando" rows="6"
+                    hint="Cuándo usar este asiento: situación, periodicidad, tipo de empresa."/>
+            </column>
+
+            <column name="real-example" title="real-example" order="200" numcolumns="12">
+                <widget type="textarea" fieldname="ejemplo" rows="5"
+                    hint="Ejemplo numérico real: importes, variables y resultado esperado."/>
+            </column>
+
+            <column name="fiscal-note" title="fiscal-note" order="300" numcolumns="12">
+                <widget type="textarea" fieldname="nota" rows="7"
+                    hint="Nota fiscal: deducibilidad, diferencias por tipo de entidad, modelos, excepciones."/>
+            </column>
+
+        </group>
+    </columns>
+</view>

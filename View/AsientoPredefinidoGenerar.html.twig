@@ -109,3 +109,18 @@
     });
 </script>
 {% endif %}
+
+
+{# ── Form dedicado para el botón Restaurar original ─────────────────── #}
+{% set modelChk = fsc.getModel() %}
+{% if modelChk.id %}
+<form id="form-restore-asiento"
+      action="{{ model.url() }}"
+      method="post"
+      style="display:none"
+      data-confirm="{{ trans('restore-entry-confirm') }}">
+    {{ formToken() }}
+    <input type="hidden" name="action" value="restore-asiento"/>
+    <input type="hidden" name="code" value="{{ modelChk.id }}"/>
+</form>
+{% endif %}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <view>
     <columns>
-        <column name="code" order="100">
+        <column name="code" order="100" numcolumns="1">
             <widget type="text" fieldname="id"/>
         </column>
         <column name="description" order="110">
@@ -10,5 +10,13 @@
         <column name="concept" order="120">
             <widget type="text" fieldname="concepto"/>
         </column>
+        <column name="custom-entry" title="custom-entry" order="130" numcolumns="1" display="center">
+            <widget type="checkbox" fieldname="personalizado" readonly="true"/>
+        </column>
     </columns>
+    <rows>
+        <row type="status">
+            <option color="warning" fieldname="personalizado">1</option>
+        </row>
+    </rows>
 </view>

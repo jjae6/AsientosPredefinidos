@@ -2,12 +2,21 @@
 <view>
     <columns>
         <group name="data" numcolumns="12">
-            <column name="description" order="100">
+            <column name="description" order="100" numcolumns="5">
                 <widget type="text" fieldname="descripcion" maxlength="150" required="true"/>
             </column>
-            <column name="concepto" title="Concepto para el asiento" order="100">
+            <column name="concepto" title="Concepto para el asiento" order="200" numcolumns="5">
                 <widget type="text" fieldname="concepto" maxlength="255" required="true"/>
+            </column>
+            <column name="custom-entry" title="custom-entry" order="300" numcolumns="2">
+                <widget type="checkbox" fieldname="personalizado"/>
             </column>
         </group>
     </columns>
+    <rows>
+        <row type="actions">
+            <button type="js" action="btnRestoreAsiento()" label="restore-entry"
+                    color="warning" icon="fas fa-rotate-left"/>
+        </row>
+    </rows>
 </view>

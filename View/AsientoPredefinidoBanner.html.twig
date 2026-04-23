@@ -1,0 +1,25 @@
+{% set model = fsc.getModel() %}
+{% if model.id %}
+    {% if model.personalizado %}
+    <div class="alert alert-warning py-2 px-3 mb-3 d-flex align-items-center justify-content-between">
+        <span>
+            <i class="fa-solid fa-lock me-2"></i>
+            <strong>{{ trans('custom-entry') }}</strong>
+            — {{ trans('custom-entry-info') }}
+        </span>
+        <form action="{{ model.url() }}" method="post" class="ms-3 flex-shrink-0">
+            {{ formToken() }}
+            <input type="hidden" name="action" value="restore-asiento"/>
+            <input type="hidden" name="idasientopre" value="{{ model.id }}"/>
+            <button type="submit" class="btn btn-sm btn-outline-warning text-dark"
+                onclick="return confirm('{{ trans('restore-entry-confirm') }}')">
+                <i class="fa-solid fa-rotate-left me-1"></i>{{ trans('restore-entry') }}
+            </button>
+        </form>
+    </div>
+    {% else %}
+    <div class="alert alert-info py-2 px-3 mb-3">
+        <i class="fa-solid fa-cubes me-2"></i>{{ trans('plugin-entry-info') }}
+    </div>
+    {% endif %}
+{% endif %}

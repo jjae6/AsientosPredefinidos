@@ -7,27 +7,18 @@
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace FacturaScripts\Plugins\AsientosPredefinidos\Model;
 
 use FacturaScripts\Core\Base\DataBase;
+use FacturaScripts\Core\Template\ModelClass;
+use FacturaScripts\Core\Template\ModelTrait;
 
-/**
- * Ayuda/ejemplo asociado a un asiento predefinido.
- * Leemos directamente con DataBase para evitar que ModelTrait
- * haga checkTable() antes de que el deploy haya creado la tabla.
- */
-class AsientoPredefinidoAyuda
+class AsientoPredefinidoAyuda extends ModelClass
 {
+    use ModelTrait;
+
     /** @var int */
     public $id;
 
@@ -44,33 +35,59 @@ class AsientoPredefinidoAyuda
     public $nota;
 
     /**
-     * Devuelve la ayuda para un asiento predefinido concreto.
-     * Devuelve null si la tabla no existe todavía o no hay registro.
+     * 0 = ayuda del CSV original (se puede sobreescribir al actualizar)
+     * 1 = editada manualmente por el usuario (nunca se sobreescribe)
+     *
+     * @var int
+     */
+    public $personalizada = 0;
+
+    public static function primaryColumn(): string
+    {
+        return 'id';
+    }
+
+    public static function tableName(): string
+    {
+        return 'asientospre_ayudas';
+    }
+
+    public function test(): bool
+    {
+        // Al guardar desde la interfaz, marcar como personalizada
+        $this->personalizada = 1;
+
+        $this->cuando  = strip_tags($this->cuando  ?? '');
+        $this->ejemplo = strip_tags($this->ejemplo ?? '');
+        $this->nota    = strip_tags($this->nota    ?? '');
+        return parent::test();
+    }
+
+    /**
+     * Devuelve la ayuda para un asiento predefinido.
+     * Usa DataBase directamente para evitar checkTable() prematuro.
      */
     public static function getByAsiento(int $idasientopre): ?self
     {
         $db = new DataBase();
-
-        // Verificar que la tabla existe antes de hacer ninguna consulta
         if (!$db->tableExists('asientospre_ayudas')) {
             return null;
         }
 
-        $sql = 'SELECT * FROM asientospre_ayudas WHERE idasientopre = '
+        $sql  = 'SELECT * FROM asientospre_ayudas WHERE idasientopre = '
             . $db->var2str($idasientopre) . ' LIMIT 1';
-
         $rows = $db->select($sql);
         if (empty($rows)) {
             return null;
         }
 
         $obj = new self();
-        $obj->id            = (int)$rows[0]['id'];
-        $obj->idasientopre  = (int)$rows[0]['idasientopre'];
-        $obj->cuando        = $rows[0]['cuando'] ?? '';
+        $obj->id            = (int)($rows[0]['id'] ?? 0);
+        $obj->idasientopre  = (int)($rows[0]['idasientopre'] ?? 0);
+        $obj->cuando        = $rows[0]['cuando']  ?? '';
         $obj->ejemplo       = $rows[0]['ejemplo'] ?? '';
-        $obj->nota          = $rows[0]['nota'] ?? null;
-
+        $obj->nota          = $rows[0]['nota']    ?? null;
+        $obj->personalizada = (int)($rows[0]['personalizada'] ?? 0);
         return $obj;
     }
 }
